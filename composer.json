@@ -1,0 +1,38 @@
+{
+  "name": "fmarin/financial",
+  "license": "MIT",
+  "type": "project",
+  "description": "Financial Domain",
+  "require": {
+    "php": ">7.4",
+
+    "ext-apcu": "*",
+    "ext-json": "*",
+    "ext-zend-opcache": "*",
+    "ext-pdo": "*",
+
+    "symfony/framework-bundle": "^4.4",
+    "symfony/dotenv": "^4.4",
+    "symfony/yaml": "^4.4"
+  },
+  "require-dev": {
+    "ext-xdebug": "*",
+
+    "symfony/debug": "^4.4",
+
+    "roave/security-advisories": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Financial\\Apps\\Backoffice\\Backend\\": "apps/backoffice/backend/src",
+      "Financial\\Apps\\Backoffice\\Frontend\\": "apps/backoffice/frontend/src",
+
+      "Financial\\": ["src"]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Financial\\Tests\\": ["tests/src"]
+    }
+  }
+}
