@@ -3,10 +3,13 @@ services:
     autoconfigure: true
     autowire: true
 
-
   Financial\Apps\Backoffice\Backend\Controller\:
     resource: '../src/Controller'
     tags: ['controller.service_arguments']
 
   Financial\:
     resource: '../../../../src'
+
+  Financial\Shared\Infrastructure\Symfony\AddJsonBodyToRequestListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

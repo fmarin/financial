@@ -3,7 +3,7 @@ backoffice_backend:
     FriendsOfBehat\SymfonyExtension:
       kernel:
         class: Financial\Apps\Backoffice\Backend\BackofficeBackendKernel
-      bootstrap: apps/backoffice/bootstrap.php
+      bootstrap: apps/bootstrap.php
     Behat\MinkExtension:
       sessions:
         symfony:
