@@ -1,0 +1,18 @@
+backoffice_backend:
+  extensions:
+    FriendsOfBehat\SymfonyExtension:
+      kernel:
+        class: Financial\Apps\Backoffice\Backend\BackofficeBackendKernel
+      bootstrap: apps/backoffice/bootstrap.php
+    Behat\MinkExtension:
+      sessions:
+        symfony:
+          symfony: ~
+      base_url: ''
+
+  suites:
+    health_check:
+      paths: [ tests/apps/backoffice/backend/features/health_check ]
+      contexts:
+        - Financial\Tests\Shared\Infrastructure\Behat\ApiRequestContext
+        - Financial\Tests\Shared\Infrastructure\Behat\ApiResponseContext

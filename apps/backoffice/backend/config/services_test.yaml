@@ -1,0 +1,12 @@
+framework:
+  test: true
+
+services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  Financial\Tests\:
+    resource: '../../../../tests/src'
+
+  Financial\Shared\Domain\RandomNumberGenerator: '@Financial\Tests\Shared\Infrastructure\ConstantRandomNumberGenerator'
