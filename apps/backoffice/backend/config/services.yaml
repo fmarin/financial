@@ -1,3 +1,6 @@
+imports:
+  - { resource: ../../../../src/Unpaid/Shared/Infrastructure/Symfony/DependencyInjection/unpaid_database.yaml }
+
 services:
   _defaults:
     autoconfigure: true
