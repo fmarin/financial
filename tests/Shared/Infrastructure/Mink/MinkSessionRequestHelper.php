@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Financial\Tests\Shared\Infrastructure\Mink;
 
-use Behat\Gherkin\Node\PyStringNode;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class MinkSessionRequestHelper
@@ -19,11 +18,6 @@ final class MinkSessionRequestHelper
     public function sendRequest($method, $url, array $optionalParams = []): void
     {
         $this->request($method, $url, $optionalParams);
-    }
-
-    public function sendRequestWithPyStringNode($method, $url, PyStringNode $body): void
-    {
-        $this->request($method, $url, ['content' => $body->getRaw()]);
     }
 
     public function request($method, $url, array $optionalParams = []): Crawler

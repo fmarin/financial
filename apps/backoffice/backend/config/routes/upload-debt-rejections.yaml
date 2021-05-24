@@ -1,0 +1,4 @@
+upload-debt-rejections_post:
+    path: /upload-debt-rejections
+    controller: Financial\Apps\Backoffice\Backend\Controller\DebtRejections\UploadDebtRejectionsPostController
+    methods:  [POST]

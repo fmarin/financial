@@ -11,10 +11,17 @@ backoffice_backend:
         symfony:
           symfony: ~
       base_url: ''
+      files_path: apps/backoffice/backend/tests/files
 
   suites:
     health_check:
       paths: [ apps/backoffice/backend/tests/features/health_check ]
+      contexts:
+        - Financial\Tests\Shared\Infrastructure\Behat\ApiRequestContext
+        - Financial\Tests\Shared\Infrastructure\Behat\ApiResponseContext
+
+    debt_rejections:
+      paths: [ apps/backoffice/backend/tests/features/debt_rejections ]
       contexts:
         - Financial\Tests\Shared\Infrastructure\Behat\ApiRequestContext
         - Financial\Tests\Shared\Infrastructure\Behat\ApiResponseContext

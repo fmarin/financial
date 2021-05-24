@@ -2,6 +2,7 @@
 /.env.*.local
 
 /apps/*/*/var/
+/apps/*/*/tests/files
 
 /vendor/
 
