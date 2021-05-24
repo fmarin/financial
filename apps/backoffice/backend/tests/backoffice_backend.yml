@@ -14,7 +14,7 @@ backoffice_backend:
 
   suites:
     health_check:
-      paths: [ tests/apps/backoffice/backend/features/health_check ]
+      paths: [ apps/backoffice/backend/tests/features/health_check ]
       contexts:
         - Financial\Tests\Shared\Infrastructure\Behat\ApiRequestContext
         - Financial\Tests\Shared\Infrastructure\Behat\ApiResponseContext

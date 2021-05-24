@@ -7,6 +7,6 @@ services:
     autowire: true
 
   Financial\Tests\:
-    resource: '../../../../tests/src'
+    resource: '../../../../tests'
 
   Financial\Shared\Domain\RandomNumberGenerator: '@Financial\Tests\Shared\Infrastructure\ConstantRandomNumberGenerator'

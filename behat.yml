@@ -1,2 +1,2 @@
 imports:
-  - tests/apps/backoffice/backend/backoffice_backend.yml
+  - apps/backoffice/backend/tests/backoffice_backend.yml

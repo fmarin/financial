@@ -24,7 +24,7 @@
 
     <testsuites>
         <testsuite name="Contexts">
-            <directory>./tests/src</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

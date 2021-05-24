@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class UnpaidEntityManagerFactory
 {
-    private const SCHEMA_PATH = __DIR__ . '/../../../../../databases/unpaid.sql';
+    private const SCHEMA_PATH = __DIR__ . '/../../../../../etc/databases/unpaid.sql';
 
     public static function create(array $parameters, string $environment): EntityManagerInterface
     {

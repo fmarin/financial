@@ -41,7 +41,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Financial\\Tests\\": ["tests/src"]
+      "Financial\\Tests\\": ["tests"]
     }
   }
 }
