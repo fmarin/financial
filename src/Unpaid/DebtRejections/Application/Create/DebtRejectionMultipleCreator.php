@@ -7,6 +7,7 @@ namespace Financial\Unpaid\DebtRejections\Application\Create;
 use Financial\Unpaid\DebtRejections\Domain\BankFileName;
 use Financial\Unpaid\DebtRejections\Domain\CreationDateTime;
 use Financial\Unpaid\DebtRejections\Domain\DebtRejectionBuilder;
+use Financial\Unpaid\DebtRejections\Domain\DebtRejectionRepository;
 use Financial\Unpaid\DebtRejections\Domain\DigiAccount;
 use Financial\Unpaid\DebtRejections\Domain\DebtAmount;
 use Financial\Unpaid\DebtRejections\Domain\DebtorAccount;
@@ -22,6 +23,13 @@ class DebtRejectionMultipleCreator
 {
     const TRANSACTION_STATUS_REJECTED = 'RJCT';
     const INITIAL_PROCESS_STATUS = 0;
+
+    private DebtRejectionRepository $repository;
+
+    public function __construct(DebtRejectionRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
     public function __invoke(string $filePath, string $fileName)
     {
@@ -60,7 +68,7 @@ class DebtRejectionMultipleCreator
                         ->setProcessStatus(new ProcessStatus(self::INITIAL_PROCESS_STATUS))
                         ->build();
 
-                    //var_dump($debtRejection);
+                    $this->repository->save($debtRejection);
 
                 }
             }

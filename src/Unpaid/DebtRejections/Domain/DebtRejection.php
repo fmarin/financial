@@ -4,9 +4,10 @@ declare(strict_types = 1);
 
 namespace Financial\Unpaid\DebtRejections\Domain;
 
+use Financial\Shared\Domain\Aggregate\AggregateRoot;
 use Financial\Shared\Domain\ValueObject\Uuid;
 
-final class DebtRejection
+final class DebtRejection extends AggregateRoot
 {
     private Uuid $id;
     private BankFileName $bankFileName;

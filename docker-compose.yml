@@ -46,6 +46,8 @@ services:
       - .:/app:delegated
     env_file:
       - .env
+    links:
+      - mysql
     depends_on:
       - mysql
       - rabbitmq

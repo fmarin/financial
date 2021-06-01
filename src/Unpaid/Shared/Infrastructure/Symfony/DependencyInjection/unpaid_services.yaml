@@ -1,0 +1,5 @@
+services:
+
+  # DebtRejections
+  Financial\Unpaid\DebtRejections\Domain\DebtRejectionRepository: '@Financial\Unpaid\DebtRejections\Infrastructure\Persistence\DoctrineDebtRejectionRepository'
+

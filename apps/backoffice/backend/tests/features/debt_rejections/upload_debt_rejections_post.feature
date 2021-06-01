@@ -3,6 +3,7 @@ Feature: Uploading debt rejections file as part of request
   As a financial user
   I should be able to send a request that contains a file
 
+  @cleanDatabase
   Scenario: I can send request with a file attached to it
     When I attach the file "DDddmmyy.000.xml" with mime type "application/xml" from path "apps/backoffice/backend/tests/files/" to the request
     Then I send a POST request to "/upload-debt-rejections"

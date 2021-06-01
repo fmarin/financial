@@ -1,5 +1,6 @@
 imports:
   - { resource: ../../../../src/Unpaid/Shared/Infrastructure/Symfony/DependencyInjection/unpaid_database.yaml }
+  - { resource: ../../../../src/Unpaid/Shared/Infrastructure/Symfony/DependencyInjection/unpaid_services.yaml }
 
 services:
   _defaults:

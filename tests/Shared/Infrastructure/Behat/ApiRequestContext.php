@@ -7,18 +7,23 @@ namespace Financial\Tests\Shared\Infrastructure\Behat;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Session;
 use Behat\MinkExtension\Context\RawMinkContext;
+use Doctrine\ORM\EntityManager;
+use Financial\Tests\Shared\Infrastructure\Doctrine\DatabaseCleaner;
 use Financial\Tests\Shared\Infrastructure\Mink\MinkHelper;
 use Financial\Tests\Shared\Infrastructure\Mink\MinkSessionRequestHelper;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use function Lambdish\Phunctional\apply;
 
 final class ApiRequestContext extends RawMinkContext
 {
     private MinkSessionRequestHelper $request;
     private array $attachments = [];
+    private EntityManager $entityManager;
 
-    public function __construct(Session $session)
+    public function __construct(Session $session, EntityManager $entityManager)
     {
         $this->request = new MinkSessionRequestHelper(new MinkHelper($session));
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -56,5 +61,13 @@ final class ApiRequestContext extends RawMinkContext
         return [
             'files' => $this->attachments
         ];
+    }
+
+    /**
+     * @AfterScenario @cleanDatabase
+     */
+    public function cleanDatabase()
+    {
+        apply(new DatabaseCleaner(), [$this->entityManager]);
     }
 }

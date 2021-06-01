@@ -19,7 +19,7 @@ use function Lambdish\Phunctional\dissoc;
 final class DoctrineEntityManagerFactory
 {
     private static $sharedPrefixes = [
-        __DIR__ . '/../../../Shared/Infrastructure/Persistence/Mappings' => 'Financial\Shared\Domain',
+        __DIR__ . '/../../../Shared/Infrastructure/Persistence/Doctrine' => 'Financial\Shared\Domain',
     ];
 
     public static function create(

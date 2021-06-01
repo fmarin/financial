@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Financial\Unpaid\DebtRejections\Domain\DebtRejection" table="debt_rejections">
+        <id name="id" type="debt_rejection_id" column="id" length="36" />
+
+        <embedded name="bankFileName" class="Financial\Unpaid\DebtRejections\Domain\BankFileName" use-column-prefix="false" />
+        <embedded name="creationDateTime" class="Financial\Unpaid\DebtRejections\Domain\CreationDateTime" use-column-prefix="false" />
+        <embedded name="refundId" class="Financial\Unpaid\DebtRejections\Domain\RefundId" use-column-prefix="false" />
+        <embedded name="internalId" class="Financial\Unpaid\DebtRejections\Domain\Rdsdb5ClientId" use-column-prefix="false" />
+        <embedded name="transactionStatus" class="Financial\Unpaid\DebtRejections\Domain\TransactionStatus" use-column-prefix="false" />
+        <embedded name="statusReasonCode" class="Financial\Unpaid\DebtRejections\Domain\StatusReasonCode" use-column-prefix="false" />
+        <embedded name="debtAmount" class="Financial\Unpaid\DebtRejections\Domain\DebtAmount" use-column-prefix="false" />
+        <embedded name="paymentDate" class="Financial\Unpaid\DebtRejections\Domain\PaymentDate" use-column-prefix="false" />
+        <embedded name="debtorAccount" class="Financial\Unpaid\DebtRejections\Domain\DebtorAccount" use-column-prefix="false" />
+        <embedded name="creditorAccount" class="Financial\Unpaid\DebtRejections\Domain\DigiAccount" use-column-prefix="false" />
+        <embedded name="debtorName" class="Financial\Unpaid\DebtRejections\Domain\DebtorName" use-column-prefix="false" />
+        <embedded name="processStatus" class="Financial\Unpaid\DebtRejections\Domain\ProcessStatus" use-column-prefix="false" />
+
+    </entity>
+
+</doctrine-mapping>
