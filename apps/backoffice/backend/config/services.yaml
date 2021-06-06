@@ -11,6 +11,10 @@ services:
     resource: '../src/Controller'
     tags: ['controller.service_arguments']
 
+  Financial\Apps\Backoffice\Backend\Command\:
+    resource: '../src/Command'
+    tags: [ 'console.command' ]
+
   Financial\:
     resource: '../../../../src'
 
