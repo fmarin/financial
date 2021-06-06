@@ -44,7 +44,12 @@ final class DebtRejection extends AggregateRoot
     {
         $debtRejection = new self($debtRejectionBuilder);
 
-//        $course->record(new CourseCreatedDomainEvent($id->value(), $name->value(), $duration->value()));
+        $debtRejection->record(
+            new DebtRejectionCreatedDomainEvent(
+                $debtRejectionBuilder->getId()->value(),
+                $debtRejection
+            )
+        );
 
         return $debtRejection;
     }

@@ -7,6 +7,11 @@ services:
     autoconfigure: true
     autowire: true
 
+  # Configure
+  _instanceof:
+    Financial\Shared\Domain\Bus\Event\DomainEventSubscriber:
+      tags: [ 'codely.domain_event_subscriber' ]
+
   Financial\Apps\Backoffice\Backend\Controller\:
     resource: '../src/Controller'
     tags: ['controller.service_arguments']
@@ -17,6 +22,11 @@ services:
 
   Financial\:
     resource: '../../../../src'
+
+  # -- TAGGING --
+  Financial\Shared\Infrastructure\Bus\Event\InMemory\InMemorySymfonyEventBus:
+    arguments: [ !tagged codely.domain_event_subscriber ]
+    lazy: true
 
   Financial\Shared\Infrastructure\Symfony\AddJsonBodyToRequestListener:
     tags:
