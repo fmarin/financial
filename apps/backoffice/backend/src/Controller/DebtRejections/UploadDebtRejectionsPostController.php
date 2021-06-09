@@ -29,26 +29,25 @@ final class UploadDebtRejectionsPostController
     {
         /** @var UploadedFile $debtRejectionsFile */
         $debtRejectionsFile = $request->files->all()[0];
-
         $bankFileName = $debtRejectionsFile->getClientOriginalName();
-
         $targetFile = self::UNPAID_UPLOAD_DIRECTORY_PATH . $bankFileName;
 
         try {
             $this->filesystem->copy($debtRejectionsFile->getPathname(), $targetFile, true);
-            $status = true;
+            $fileCopied = true;
         } catch (IOException $exception) {
-            $status = $exception->getMessage();
+            $fileCopied = $exception->getMessage();
         }
 
-        if ($status) {
-            $this->debtRejectionMultipleCreator->__invoke($targetFile, $bankFileName);
+        if ($fileCopied) {
+            $debtsRejectedFile = simplexml_load_file($targetFile);
+            $this->debtRejectionMultipleCreator->__invoke($debtsRejectedFile, $bankFileName);
         }
 
         return new JsonResponse(
             [
                 'file-name' => $bankFileName,
-                'uploaded'  => $status
+                'uploaded'  => $fileCopied
             ]
         );
     }

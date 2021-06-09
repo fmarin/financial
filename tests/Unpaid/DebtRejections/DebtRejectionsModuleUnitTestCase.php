@@ -8,7 +8,6 @@ use Financial\Tests\Shared\Infrastructure\PhpUnit\UnitTestCase;
 use Financial\Unpaid\DebtRejections\Domain\DebtRejection;
 use Financial\Unpaid\DebtRejections\Domain\DebtRejectionRepository;
 use Mockery\MockInterface;
-use Ramsey\Uuid\Uuid;
 
 abstract class DebtRejectionsModuleUnitTestCase extends UnitTestCase
 {
@@ -18,7 +17,8 @@ abstract class DebtRejectionsModuleUnitTestCase extends UnitTestCase
     {
         $this->repository()
             ->shouldReceive('save')
-            ->with($debtRejection)
+            ->once()
+            ->with($this->similarTo($debtRejection))
             ->andReturnNull();
     }
 

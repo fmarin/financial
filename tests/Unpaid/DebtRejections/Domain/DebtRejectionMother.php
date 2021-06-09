@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Financial\Tests\Unpaid\DebtRejections\Domain;
 
+use Financial\Shared\Domain\ValueObject\Uuid;
 use Financial\Unpaid\DebtRejections\Domain\BankFileName;
 use Financial\Unpaid\DebtRejections\Domain\CreationDateTime;
 use Financial\Unpaid\DebtRejections\Domain\DebtAmount;
@@ -26,23 +27,37 @@ final class DebtRejectionMother
     public static function create(): DebtRejection
     {
         return (new DebtRejectionBuilder())
+            ->setId(new Uuid('519ec3f0-589d-4fa7-9595-52e6249e2957'))
             ->setBankFileName(new BankFileName(self::TEST_FILE_NAME))
             ->setCreationDateTime(new CreationDateTime('2021-05-21T06:00:01'))
-            ->setRefundId(new RefundId('4806B6'))
-            ->setInternalId(new Rdsdb5ClientId('0007270401'))
+            ->setRefundId(new RefundId('4806B60007270401'))
+            ->setInternalId(new Rdsdb5ClientId('4806B60007270401'))
             ->setTransactionStatus(new TransactionStatus('RJCT'))
             ->setStatusReasonCode(new StatusReasonCode('AG01'))
             ->setDebtAmount(new DebtAmount('29.96'))
             ->setPaymentDate(new PaymentDate('2021-05-17'))
-            ->setDebtorAccount(new DebtorAccount('ES2930580990242753231782'))
-            ->setCreditorAccount(new DigiAccount('ES9521008674140200010616'))
-            ->setDebtorName(new DebtorName('Lidia Marta Vascan'))
+            ->setDebtorAccount(new DebtorAccount('ESXXXXXXXXXXXXXXXXXXXXXX'))
+            ->setCreditorAccount(new DigiAccount('ESYYYYYYYYYYYYYYYYYYYYYY'))
+            ->setDebtorName(new DebtorName('Dolores Fuertes de Barriga'))
             ->setProcessStatus(new ProcessStatus(0))
             ->build();
     }
 
-    public static function random(): DebtRejection
-    {
-        return self::create();
+    public static function getRowDataForCreation(): array{
+        return [
+            'id' => new Uuid('519ec3f0-589d-4fa7-9595-52e6249e2957'),
+            'bankFileName' => self::TEST_FILE_NAME,
+            'creationDateTime' => '2021-05-21T06:00:01',
+            'refundId' => '4806B60007270401',
+            'internalId' => '4806B60007270401',
+            'transactionStatus' => 'RJCT',
+            'statusReasonCode' => 'AG01',
+            'debtAmount' => '29.96',
+            'paymentDate' => '2021-05-17',
+            'debtorAccount' => 'ESXXXXXXXXXXXXXXXXXXXXXX',
+            'creditorAccount' => 'ESYYYYYYYYYYYYYYYYYYYYYY',
+            'debtorName' => 'Dolores Fuertes de Barriga',
+            'processStatus' => 0
+        ];
     }
 }

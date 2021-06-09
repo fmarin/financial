@@ -9,6 +9,7 @@ class DebtRejectionFactory
     public static function create(array $data): DebtRejection
     {
         return (new DebtRejectionBuilder())
+            ->setId($data['id'])
             ->setBankFileName(new BankFileName($data['bankFileName']))
             ->setCreationDateTime(new CreationDateTime($data['creationDateTime']))
             ->setRefundId(new RefundId($data['refundId']))

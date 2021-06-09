@@ -13,7 +13,7 @@ final class DebtRejectionRepositoryTest extends DebtRejectionsModuleInfrastructu
     /** @test */
     public function it_should_save_a_debt_rejection(): void
     {
-        $debtRejection = DebtRejectionMother::random();
+        $debtRejection = DebtRejectionMother::create();
 
         $this->repository()->save($debtRejection);
     }
@@ -21,7 +21,7 @@ final class DebtRejectionRepositoryTest extends DebtRejectionsModuleInfrastructu
     /** @test */
     public function it_should_return_an_existing_debt_rejection(): void
     {
-        $debtRejection = DebtRejectionMother::random();
+        $debtRejection = DebtRejectionMother::create();
 
         $this->repository()->save($debtRejection);
 

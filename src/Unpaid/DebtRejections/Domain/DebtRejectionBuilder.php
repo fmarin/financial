@@ -22,9 +22,10 @@ final class DebtRejectionBuilder
     private DebtorName $debtorName;
     private ProcessStatus $processStatus;
 
-    public function __construct()
+    public function setId(Uuid $id): self
     {
-        $this->id = Uuid::random();
+        $this->id = $id;
+        return $this;
     }
 
     public function setBankFileName(BankFileName $bankFileName): self
