@@ -118,4 +118,9 @@ final class DebtRejection extends AggregateRoot
     {
         return $this->processStatus;
     }
+
+    public function setProcessStatus(ProcessStatus $status)
+    {
+        $this->processStatus = $status;
+    }
 }

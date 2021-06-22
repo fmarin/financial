@@ -100,7 +100,7 @@ final class DebtRejectionBuilder
         return $this;
     }
 
-    // Biulder
+    // Builder
     public function build(): DebtRejection
     {
         return DebtRejection::create($this);

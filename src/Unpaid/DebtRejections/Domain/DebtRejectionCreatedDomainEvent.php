@@ -28,6 +28,7 @@ final class DebtRejectionCreatedDomainEvent extends DomainEvent
     public function toPrimitives(): array
     {
         return [
+            'id' => $this->debtRejection->id(),
             'bankFileName' => $this->debtRejection->BankFileName()->value(),
             'creationDateTime' => $this->debtRejection->CreationDateTime()->value(),
             'refundId' => $this->debtRejection->RefundId()->value(),
