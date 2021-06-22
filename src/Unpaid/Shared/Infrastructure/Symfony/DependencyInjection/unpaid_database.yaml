@@ -11,4 +11,13 @@ services:
         password: '%env(UNPAID_DATABASE_PASSWORD)%'
       - '%env(APP_ENV)%'
     tags:
-      - { name: financial.unpaid.database }
+      - { name: financial.database_connection }
+
+  Doctrine\DBAL\Connection:
+    factory: [ Financial\Unpaid\Shared\Infrastructure\Doctrine\LegacyConnectionManagerFactory, create ]
+    arguments:
+      - driver:   '%env(LEGACY_DATABASE_DRIVER)%'
+        host:     '%env(LEGACY_DATABASE_HOST)%'
+        dbname:   '%env(LEGACY_DATABASE_NAME)%'
+        user:     '%env(LEGACY_DATABASE_USER)%'
+        password: '%env(LEGACY_DATABASE_PASSWORD)%'
