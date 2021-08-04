@@ -26,13 +26,9 @@ RUN apk --update upgrade \
     && docker-php-ext-enable \
         amqp \
         apcu \
-        opcache
+        opcache \
+        xdebug
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=2.0.13
 
 RUN apk --no-cache add shadow && usermod -u 1000 www-data
-
-COPY etc/infrastructure/php/ /usr/local/etc/php/
-
-
-
