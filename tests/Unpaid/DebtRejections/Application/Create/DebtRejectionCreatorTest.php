@@ -23,13 +23,13 @@ final class DebtRejectionCreatorTest extends DebtRejectionsModuleUnitTestCase
     /** @test */
     public function it_should_create_a_debt_rejection(): void
     {
-        $dataForCreation = DebtRejectionMother::getRowDataForCreation();
-        $debtRejection = DebtRejectionMother::create();
+        $debtRejectionData = DebtRejectionMother::getRowDataForCreation();
+        $debtRejection = DebtRejectionMother::fromRawData($debtRejectionData);
         $domainEvent = DebtRejectionCreatedDomainEventMother::create($debtRejection);
 
         $this->shouldSave($debtRejection);
         $this->shouldPublishDomainEvent($domainEvent);
 
-        $this->creator->__invoke($dataForCreation);
+        $this->creator->__invoke($debtRejectionData);
     }
 }
