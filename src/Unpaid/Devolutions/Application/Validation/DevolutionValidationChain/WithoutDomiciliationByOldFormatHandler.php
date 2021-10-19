@@ -8,9 +8,8 @@ use Financial\Shared\Domain\Bus\Event\EventBus;
 use Financial\Shared\Domain\CoRAbstractHandler;
 use Financial\Unpaid\DebtRejections\Domain\DebtRejection;
 use Financial\Unpaid\DebtRejections\Domain\ProcessStatus;
-use Financial\Unpaid\Devolutions\Application\Validation\PrepareDataToSend\DevolutionPreparatorFactory;
 use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedDomainEventFactory;
-use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedToInsertBillsDomainEvent;
+use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedToInsertBillsDomainEventFactory;
 use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedToUpdateStatusDomainEventFactory;
 use Financial\Unpaid\Domiciliations\Domain\Bancara;
 
@@ -38,43 +37,37 @@ final class WithoutDomiciliationByOldFormatHandler extends CoRAbstractHandler
 
     public function handle()
     {
-        var_dump('SECOND VALIDATION');
+        dump('SECOND VALIDATION');
 
         if(
             $this->debtRejection->internalId()->isNumeric() &&
             $this->domiciliation->id()->isEmpty() && !$this->devolutionExistsWithClient
         ){
-            var_dump("PUBLISH INSERT IN bancara_devol && bill && bill_load");
-
-            $devolutionPreparator = DevolutionPreparatorFactory::create(
-                $this->debtRejection,
-                $this->domiciliation,
-                self::INSERT_TYPE
-            );
-
-            $devolutionValidatedDomainEvent = DevolutionValidatedDomainEventFactory::create(
-                $this->debtRejection->id()->value(),
-                $devolutionPreparator->__invoke()
-            );
-
-            $devolutionValidatedToInsertBillsDomainEvent = new DevolutionValidatedToInsertBillsDomainEvent(
-                $this->debtRejection->id()->value(),
-                $this->debtRejection
-            );
-
-            $devolutionValidatedToUpdateStatusDomainEvent = DevolutionValidatedToUpdateStatusDomainEventFactory::create(
-                $this->debtRejection->id()->value(),
-                ProcessStatus::DEVOLUTION_CREATED_WITHOUT_DOMICILIATION_BY_OLD_FORMAT
-            );
-
-            $this->bus->publish(...[
-                $devolutionValidatedDomainEvent,
-                $devolutionValidatedToInsertBillsDomainEvent,
-                $devolutionValidatedToUpdateStatusDomainEvent
-            ]);
-
+            dump("PUBLISH INSERT IN bancara_devol && bill && bill_load");
+            $this->bus->publish(...$this->getDomainEventsToPublish());
         }else{
             return $this->next();
         }
+    }
+
+    private function getDomainEventsToPublish(): array
+    {
+        $devolutionValidatedDomainEvent = DevolutionValidatedDomainEventFactory::create(
+            $this->debtRejection,
+            $this->domiciliation,
+            self::INSERT_TYPE
+        );
+
+        $insertBillsDomainEvent = DevolutionValidatedToInsertBillsDomainEventFactory::create(
+            $this->debtRejection,
+            $this->domiciliation->bankId()
+        );
+
+        $updateStatusDomainEvent = DevolutionValidatedToUpdateStatusDomainEventFactory::create(
+            $this->debtRejection->id()->value(),
+            ProcessStatus::DEVOLUTION_CREATED_WITHOUT_DOMICILIATION_BY_OLD_FORMAT
+        );
+
+        return [$devolutionValidatedDomainEvent, $insertBillsDomainEvent, $updateStatusDomainEvent];
     }
 }

@@ -45,7 +45,7 @@ SQL;
         return (int) $exists[0]['exist'];
     }
 
-    public function save(): void
+    public function save($params = []): void
     {
 
     }

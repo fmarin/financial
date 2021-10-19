@@ -8,8 +8,9 @@ use Financial\Shared\Domain\Bus\Event\EventBus;
 use Financial\Shared\Domain\CoRAbstractHandler;
 use Financial\Unpaid\DebtRejections\Domain\DebtRejection;
 use Financial\Unpaid\DebtRejections\Domain\ProcessStatus;
-use Financial\Unpaid\Devolutions\Application\Validation\PrepareDataToSend\DevolutionPreparatorFactory;
 use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedDomainEventFactory;
+use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedToExecuteBillProcedureDomainEventFactory;
+use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedToUpdateDomiciliationStatusDomainEventFactory;
 use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedToUpdateStatusDomainEventFactory;
 use Financial\Unpaid\Domiciliations\Domain\Bancara;
 
@@ -30,35 +31,41 @@ final class PaidWithExistingBillHandler extends CoRAbstractHandler
 
     public function handle()
     {
-        var_dump('BLOCK THREE');
+        dump('BLOCK THREE');
 
         if(!$this->domiciliation->billId()->isEmpty() && $this->domiciliation->incasat()->value()){
-            var_dump("PUBLISH INSERT/UPDATE IN bloque 3 (procedures devolutti), bancara_devol, bancara");
-
-            // TODO: EXECUTE PROCEDURE usp_directDebitDevoluti
-
-            $devolutionPreparator = DevolutionPreparatorFactory::create(
-                $this->debtRejection,
-                $this->domiciliation,
-                self::INSERT_TYPE
-            );
-
-            $devolutionValidatedDomainEvent = DevolutionValidatedDomainEventFactory::create(
-                $this->debtRejection->id()->value(),
-                $devolutionPreparator->__invoke()
-            );
-
-            // TODO: CREATE DOMEIN EVENT TO UPDATE BANCARA TABLE
-
-            $devolutionValidatedToUpdateStatusDomainEvent = DevolutionValidatedToUpdateStatusDomainEventFactory::create(
-                $this->debtRejection->id()->value(),
-                ProcessStatus::DEVOLUTION_CREATED_OK
-            );
-
-            $this->bus->publish(...[
-                $devolutionValidatedDomainEvent,
-                $devolutionValidatedToUpdateStatusDomainEvent
-            ]);
+            dump("PUBLISH INSERT/UPDATE IN bloque 3 (procedures devolutti), bancara_devol, bancara");
+            $this->bus->publish(...$this->getDomainEventsToPublish());
         }
+    }
+
+    private function getDomainEventsToPublish(): array
+    {
+        $executeBillProcedureDomainEvent = DevolutionValidatedToExecuteBillProcedureDomainEventFactory::create(
+            $this->debtRejection,
+            $this->domiciliation,
+        );
+
+        $devolutionValidatedDomainEvent = DevolutionValidatedDomainEventFactory::create(
+            $this->debtRejection,
+            $this->domiciliation,
+            self::INSERT_TYPE
+        );
+
+        $updateDomiciliationStatusDomainEvent = DevolutionValidatedToUpdateDomiciliationStatusDomainEventFactory::create(
+            $this->debtRejection
+        );
+
+        $updateStatusDomainEvent = DevolutionValidatedToUpdateStatusDomainEventFactory::create(
+            $this->debtRejection->id()->value(),
+            ProcessStatus::DEVOLUTION_CREATED_OK
+        );
+
+        return [
+            $executeBillProcedureDomainEvent,
+            $devolutionValidatedDomainEvent,
+            $updateDomiciliationStatusDomainEvent,
+            $updateStatusDomainEvent
+        ];
     }
 }

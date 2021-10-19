@@ -8,7 +8,6 @@ use Financial\Shared\Domain\Bus\Event\EventBus;
 use Financial\Shared\Domain\CoRAbstractHandler;
 use Financial\Unpaid\DebtRejections\Domain\DebtRejection;
 use Financial\Unpaid\DebtRejections\Domain\ProcessStatus;
-use Financial\Unpaid\Devolutions\Application\Validation\PrepareDataToSend\DevolutionPreparatorFactory;
 use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedDomainEventFactory;
 use Financial\Unpaid\Devolutions\Domain\DevolutionValidatedToUpdateStatusDomainEventFactory;
 use Financial\Unpaid\Domiciliations\Domain\Bancara;
@@ -37,30 +36,30 @@ final class DomiciliationCreatedWithExternalCustomerIdHandler extends CoRAbstrac
 
     public function handle()
     {
-        var_dump('FIRST VALIDATION');
+        dump('-----------------------------------------------------------');
+        dump('FIRST VALIDATION');
 
         if(!$this->debtRejection->internalId()->isNumeric() && !$this->devolutionExistsWithClient){
-            var_dump("PUBLISH INSERT IN bancara_devol");
-
-            $devolutionPreparator = DevolutionPreparatorFactory::create(
-                $this->debtRejection,
-                $this->domiciliation,
-                self::INSERT_TYPE
-            );
-
-            $devolutionValidatedDomainEvent = DevolutionValidatedDomainEventFactory::create(
-                $this->debtRejection->id()->value(),
-                $devolutionPreparator->__invoke()
-            );
-
-            $devolutionValidatedToUpdateStatusDomainEvent = DevolutionValidatedToUpdateStatusDomainEventFactory::create(
-                $this->debtRejection->id()->value(),
-                ProcessStatus::DEVOLUTION_CREATED_WITH_EXTERNAL_CUSTOMER_ID
-            );
-
-            $this->bus->publish(...[$devolutionValidatedDomainEvent, $devolutionValidatedToUpdateStatusDomainEvent]);
+            dump("PUBLISH INSERT IN bancara_devol");
+            $this->bus->publish(...$this->getDomainEventsToPublish());
         }else{
             return $this->next();
         }
+    }
+
+    private function getDomainEventsToPublish(): array
+    {
+        $devolutionValidatedDomainEvent = DevolutionValidatedDomainEventFactory::create(
+            $this->debtRejection,
+            $this->domiciliation,
+            self::INSERT_TYPE
+        );
+
+        $updateStatusDomainEvent = DevolutionValidatedToUpdateStatusDomainEventFactory::create(
+            $this->debtRejection->id()->value(),
+            ProcessStatus::DEVOLUTION_CREATED_WITH_EXTERNAL_CUSTOMER_ID
+        );
+
+        return [$devolutionValidatedDomainEvent, $updateStatusDomainEvent];
     }
 }

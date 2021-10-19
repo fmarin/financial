@@ -10,5 +10,5 @@ interface DevolutionRepository
 
     public function existsByInternalId($params = []): int;
 
-    public function save(): void;
+    public function save($params = []): void;
 }

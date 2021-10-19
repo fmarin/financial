@@ -36,7 +36,7 @@ final class PendingOfInsertDevolutionHandler extends CoRAbstractHandler
 
     public function handle()
     {
-        var_dump('THIRD VALIDATION');
+        dump('THIRD VALIDATION');
 
         if(
             $this->debtRejection->internalId()->isNumeric() &&
@@ -51,12 +51,12 @@ final class PendingOfInsertDevolutionHandler extends CoRAbstractHandler
             $firstPaidValidation->handle();
 
         }else{
-            $devolutionValidatedToUpdateStatusDomainEvent = DevolutionValidatedToUpdateStatusDomainEventFactory::create(
+            $updateStatusDomainEvent = DevolutionValidatedToUpdateStatusDomainEventFactory::create(
                 $this->debtRejection->id()->value(),
                 ProcessStatus::DEVOLUTION_CREATED_BEFORE
             );
 
-            $this->bus->publish(...[$devolutionValidatedToUpdateStatusDomainEvent]);
+            $this->bus->publish(...[$updateStatusDomainEvent]);
         }
     }
 }

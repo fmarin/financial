@@ -5,21 +5,19 @@ declare(strict_types = 1);
 namespace Financial\Unpaid\Devolutions\Domain;
 
 use Financial\Shared\Domain\Bus\Event\DomainEvent;
-use Financial\Unpaid\DebtRejections\Domain\DebtRejection;
-use Financial\Unpaid\DebtRejections\Domain\DebtRejectionFactory;
 
 final class DevolutionValidatedToInsertBillsDomainEvent extends DomainEvent
 {
-    private DebtRejection $debtRejection;
+    private array $billData;
 
     public function __construct(
         string $id,
-        DebtRejection $debtRejection,
+        array $billData,
         string $eventId = null,
         string $occurredOn = null
     ) {
         parent::__construct($id, $eventId, $occurredOn);
-        $this->debtRejection = $debtRejection;
+        $this->billData = $billData;
     }
 
     public static function eventName(): string
@@ -29,21 +27,7 @@ final class DevolutionValidatedToInsertBillsDomainEvent extends DomainEvent
 
     public function toPrimitives(): array
     {
-        return [
-            'id' => $this->debtRejection->id(),
-            'bankFileName' => $this->debtRejection->BankFileName()->value(),
-            'creationDateTime' => $this->debtRejection->CreationDateTime()->value(),
-            'refundId' => $this->debtRejection->RefundId()->value(),
-            'internalId' => $this->debtRejection->InternalId()->value(),
-            'transactionStatus' => $this->debtRejection->TransactionStatus()->value(),
-            'statusReasonCode' => $this->debtRejection->StatusReasonCode()->value(),
-            'debtAmount' => $this->debtRejection->DebtAmount()->value(),
-            'paymentDate' => $this->debtRejection->PaymentDate()->value(),
-            'debtorAccount' => $this->debtRejection->DebtorAccount()->value(),
-            'creditorAccount' => $this->debtRejection->CreditorAccount()->value(),
-            'debtorName' => $this->debtRejection->DebtorName()->value(),
-            'processStatus' => $this->debtRejection->ProcessStatus()->value()
-        ];
+        return $this->billData;
     }
 
     public static function fromPrimitives(
@@ -54,7 +38,7 @@ final class DevolutionValidatedToInsertBillsDomainEvent extends DomainEvent
     ): DomainEvent {
         return new self(
             $aggregateId,
-            DebtRejectionFactory::create($body),
+            $body,
             $eventId,
             $occurredOn
         );

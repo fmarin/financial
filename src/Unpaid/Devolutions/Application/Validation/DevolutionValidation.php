@@ -12,6 +12,7 @@ use Financial\Unpaid\Devolutions\Application\Validation\DevolutionValidationChai
 use Financial\Unpaid\Devolutions\Application\Validation\DevolutionValidationChain\WithoutDomiciliationByOldFormatHandler;
 use Financial\Unpaid\Devolutions\Application\Validation\DevolutionValidationChain\DomiciliationCreatedWithExternalCustomerIdHandler;
 use Financial\Unpaid\Domiciliations\Application\Find\DomiciliationFinder;
+use Financial\Unpaid\Domiciliations\Domain\Bancara;
 
 final class DevolutionValidation
 {
@@ -35,21 +36,9 @@ final class DevolutionValidation
 
     public function __invoke(DebtRejection $debtRejection): void
     {
-        $domiciliation = $this->domiciliationFinder->__invoke(
-            $debtRejection->refundId()->value(),
-            $debtRejection->internalId()->value()
-        );
-
-        $devolutionExists = $this->devolutionExists->__invoke(
-            $debtRejection->refundId()->value(),
-            $debtRejection->internalId()->value()
-        );
-
-        $devolutionExistsWithClient = $this->devolutionExistsWithClient->__invoke(
-            $debtRejection->internalId()->valueAsNumeric(),
-            $debtRejection->creationDateTime()->value(),
-            $debtRejection->paymentDate()->value()
-        );
+        $domiciliation = $this->getDomiciliation($debtRejection);
+        $devolutionExists = $this->checkDevolutionExists($debtRejection);
+        $devolutionExistsWithClient = $this->checkDevolutionExistsWithClient($debtRejection);
 
         $firstValidation = new DomiciliationCreatedWithExternalCustomerIdHandler($debtRejection, $domiciliation, $devolutionExistsWithClient, $this->bus);
         $secondValidation = new WithoutDomiciliationByOldFormatHandler($debtRejection, $domiciliation, $devolutionExistsWithClient, $this->bus);
@@ -58,5 +47,30 @@ final class DevolutionValidation
         $firstValidation->setNext($secondValidation);
         $secondValidation->setNext($thirdValidation);
         $firstValidation->handle();
+    }
+
+    private function getDomiciliation($debtRejection): Bancara
+    {
+        return $this->domiciliationFinder->__invoke(
+            $debtRejection->refundId()->value(),
+            $debtRejection->internalId()->value()
+        );
+    }
+
+    private function checkDevolutionExists($debtRejection): int
+    {
+        return $this->devolutionExists->__invoke(
+            $debtRejection->refundId()->value(),
+            $debtRejection->internalId()->value()
+        );
+    }
+
+    public function checkDevolutionExistsWithClient($debtRejection): int
+    {
+        return $this->devolutionExistsWithClient->__invoke(
+            $debtRejection->internalId()->valueAsNumeric(),
+            $debtRejection->creationDateTime()->value(),
+            $debtRejection->paymentDate()->value()
+        );
     }
 }

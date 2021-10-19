@@ -8,4 +8,8 @@ use Financial\Shared\Domain\ValueObject\StringValueObject;
 
 final class DebtAmount extends StringValueObject
 {
+    public function getValueInNegative(): string
+    {
+        return '-' . $this->value();
+    }
 }

@@ -57,4 +57,16 @@ SQL;
             new Type((int) $bancaraData['type'])
         );
     }
+
+    public function update($params = []): void
+    {
+        $sql = <<<SQL
+            UPDATE [WORK].[dbo].[domiciliere_bancara_test]
+            SET status = :status
+            WHERE id_refund = :refundId 
+              AND internal_id = :internalId
+SQL;
+
+        $this->executeUpdate($sql, $params);
+    }
 }
